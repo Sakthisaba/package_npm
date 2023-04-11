@@ -1,7 +1,7 @@
 {
   "name": "biosafepackage",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@chakra-ui/react": "^2.5.2",

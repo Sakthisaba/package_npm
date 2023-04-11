@@ -1,10 +1,10 @@
-import Storage from '../../utils/Storage.json'
-import ContractAddress from '../../contract/contract.json'
+import Storage from './Storage.json'
+import ContractAddress from './ContractAddress.json'
 import { File, FormData} from 'formdata-node'
 import {ethers} from  'ethers'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-const Contract = ContractAddress.contractAddress;
+const Contract = ContractAddress.Address;
 export default  async function Auth(img,email,action)
 { 
   //  const navigate = useNavigate()

@@ -1,10 +1,10 @@
 import { useState ,useRef } from "react";
 import WebCam from 'react-webcam'
 
-import base64ToImage from '../../utils/base64ToImage';
-import register from '../../assets/register.png'
+
+import register from './register.png'
 import validator from 'validator'
-import style from '../../style'
+import style from './style'
 import Auth from './Auth'
 import {
   Input,
