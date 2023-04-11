@@ -1,12 +1,13 @@
 import { useState ,useRef } from "react";
 import WebCam from 'react-webcam'
 
-import base64ToImage from './base64ToImage';
-import register from './register.png'
+import base64ToImage from '../../utils/base64ToImage';
+import register from '../../assets/register.png'
 import validator from 'validator'
-import style from './style'
+import style from '../../style'
 import Auth from './Auth'
 import {
+  Input,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -26,7 +27,6 @@ function LoginForm()
     const[type,setType] =useState()
     const [count,setCount] = useState(0);
 
-    const[action,setAction] = useState('FACE')
     const [ipfsImg,setIpfsImg] = useState(0)
 
 
@@ -63,7 +63,7 @@ function LoginForm()
              <ModalBody>
 
               <Text className={`font-poppins font-semibold `}>Email address </Text>
-              <input type='email' onChange={handleEmail} className={`w-[300px] p-2 h-[35px] bg-slate-200 font-medium rounded-[10px] font-poppins border-slate-600`}></input>
+              <input type='text' onChange={handleEmail} className={`w-[300px] p-2 h-[35px] bg-slate-200 font-medium rounded-[10px] font-poppins border-slate-600`}></input>
               {error && <p className={`text-red-600 font-poppins`}>Enter a valid mail</p>}
             </ModalBody>
             <ModalFooter>
@@ -75,12 +75,12 @@ function LoginForm()
     return (<>
           <ModalBody className={`${style.flexCenter} flex-col`}>
           
-              <Text className={`font-poppins font-semibold text-center hoverr`}>Login With biometric</Text>
+              <Text className={`font-poppins font-semibold text-center `}>Login With biometric</Text>
               <img src={register} className={`w-[70%] center`}></img>
              <div >
-                <input type="radio" className={`font-poppins font-medium`}  name="a" value="face" onChange={(e)=>setType(e.target.value)}/>
+                <input type="radio" className={`font-poppins font-medium `}  name="a" value="FACE" onChange={(e)=>setType(e.target.value)}/>
               <label htmlFor="html" className={''}>FaceID</label>
-              <input type="radio" value="finger" className={`font-poppins ml-4` }  name="a" onChange={(e)=>setType(e.target.value)}/>
+              <input type="radio" value="FINGERPRINT" className={`font-poppins ml-4` }  name="a" onChange={(e)=>setType(e.target.value)}/>
                <label htmlFor="css" >Fingerprint</label>
              </div>
             </ModalBody>
@@ -93,13 +93,14 @@ function LoginForm()
 
         case 2:
             return(<>
-             <ModalHeader className={`mb-6`}>Face Capture</ModalHeader>
+             <ModalHeader className={`mb-4`}>{type}</ModalHeader>
              <ModalBody className={'flex justify-center flex-col p-4'}>
 
-              <Text className={`font-poppins font-semibold `}>{type} </Text>
-              {img==0? <WebCam className={`w-[400px] h-[200px] `} ref={webref}></WebCam>:<img src={img} className={`w-[400px] h-[200px] `} ></img>}
+              {type=="FINGERPRINT"? <><p  className={'font-thin p-4 text-red-500'}>Note:As of now, the fingerprint template is uploaded as  file instead of scanning from biometric reader</p><Input type='file' name='fingerprint_template' onChange={(e)=>{setImg(e.target.files[0])}}></Input></>
+                       :FaceComponent(img,webref,takePicture)}
               
-              <div className={`py-5 flex justify-center align-middle`}><Button align='center' colorScheme='red' className={`w-[100px] `} onClick={takePicture}>Take picture</Button></div>
+              
+              
               
             </ModalBody>
             <div className={`flex flex-row justify-around m-4`}>
@@ -108,7 +109,7 @@ function LoginForm()
               <input hidden type='file'  name="chunkFiles" ref={base64ToImage(img)}></input>
               <input hidden type='text'  name="action" value={type}></input> */}
             <Button colorScheme='teal' variant='outline' onClick={()=>setCount(count-1)}>Back</Button>
-            <Button colorScheme='teal' variant='solid' onClick={(e)=>{Auth(img,email,action)}}>Verify</Button>
+            <Button colorScheme='teal' variant='solid' onClick={(e)=>{Auth(img,email,type)}}>Verify</Button>
             {/* <Button colorScheme='teal' variant='solid' type='submit'>Verify</Button></form> */}
             </div>
             
@@ -116,5 +117,10 @@ function LoginForm()
     }
 }
 
-
+function FaceComponent(img,webref,takePicture){
+  return img==0? <><WebCam className={`w-[400px] h-[200px] `} ref={webref}></WebCam><div className={`py-5 flex justify-center align-middle`}><Button align='center' colorScheme='red' className={`w-[100px] `} onClick={takePicture}>Take picture</Button></div></>:<img src={img} className={`w-[400px] h-[200px] `} ></img>
+}
+function FingerprintComponent(){
+  return <></>
+}
 export default LoginForm;
